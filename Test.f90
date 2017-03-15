@@ -4,14 +4,14 @@ program asdasfvcxy
 contains
     subroutine test()
         type(list) :: a
-        type(list), target :: b
+        type(list) :: b
         type(list), dimension(1) :: bb
         integer,dimension(3) :: y
         real,dimension(2) :: zz
         character(3),dimension(1) :: qq
-        real,dimension(2),target :: z
-        character(3),dimension(1),target :: q
-        integer, dimension(3),target :: x
+        real,dimension(2) :: z
+        character(3),dimension(1) :: q
+        integer, dimension(3) :: x
         x=5
         z=2.5
         q="asd"
