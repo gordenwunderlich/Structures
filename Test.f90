@@ -50,5 +50,9 @@ contains
         call a%remove(1)
         call a%get(qq,1)
         print *, qq
+        call b%add(x,3)
+        y = 0
+        call b%get(y)
+        print *, y
     endsubroutine
 endprogram

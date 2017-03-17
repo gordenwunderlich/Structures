@@ -29,9 +29,10 @@ module LinkedList
         final :: list_destroy
     endtype
     interface
-        pure module subroutine list_add(lst,dat)
+        pure module subroutine list_add(lst,dat,num)
             class(list), intent(inout) :: lst
             class(*), dimension(:), intent(in) :: dat
+            integer, intent(in), optional :: num
         endsubroutine
     
         pure module subroutine list_remove_by_data(lst,dat)

@@ -1,18 +1,36 @@
 submodule (linkedlist) linkedlist_funcs
 use struct_util
 contains
-    pure module subroutine list_add(lst,dat)
+    pure module subroutine list_add(lst,dat, num)
         class(list), intent(inout) :: lst
-        type(node),pointer :: tmp
+        type(node),pointer :: tmp, lasttmp
+        type(node),target :: toadd
+        integer,intent(in), optional :: num
+        integer :: count
         class(*), dimension(:),intent(in) :: dat
+        count = 1
         if(.not.associated(lst%first)) then
             allocate(lst%first, source=node(data = dat))
         else
-            tmp=>lst%first
-            do while(associated(tmp%next))
-                tmp=>tmp%next
+            tmp => lst%first
+            lasttmp => null()
+            do while((.not. present(num) .or. count .lt. num) .and. associated(tmp%next))
+                lasttmp => tmp
+                tmp => tmp%next
+                count = count + 1
             enddo
-            allocate(tmp%next,source=node(data = dat))
+            if(.not. present(num)) then
+                allocate(tmp%next,source=node(data = dat))
+            else
+                if(.not. associated(lasttmp)) then
+                    allocate(toadd%data, source=dat)
+                    toadd%next => lst%first
+                    lst%first => toadd
+                else
+                    allocate(lasttmp%next,source=node(data = dat))
+                    lasttmp%next%next => tmp
+                endif
+            endif
         endif
         lst%len=lst%len+1
     endsubroutine
@@ -152,19 +170,19 @@ contains
     
     elemental module subroutine list_destroy(lst)
     type(list), intent(inout) :: lst
-    type(node), dimension(lst%len) :: lstnodes
     if(associated(lst%first)) then
-        lstnodes(1) = lst%first
-        deallocate(lstnodes(1)%data)
-        deallocate(lst%first%data)
-        do i=2,lst%len
-            lstnodes(i)=lstnodes(i-1)%next
-            deallocate(lstnodes(i-1)%next%data)
-            deallocate(lstnodes(i-1)%next)
-            deallocate(lstnodes(i)%data)
-        enddo
-        deallocate(lst%first)
+       call list_destroy_node(lst%first)
+       deallocate(lst%first)
     endif
+    endsubroutine
+    
+    pure recursive subroutine list_destroy_node(nde)
+        type(node), intent(inout) :: nde
+        if(allocated(nde%data)) deallocate(nde%data)
+        if(associated(nde%next)) then
+            call list_destroy_node(nde%next)
+            deallocate(nde%next)
+        endif
     endsubroutine
     
     elemental module function list_length(lst) result(res)
