@@ -15,10 +15,13 @@ module LinkedList
         integer :: len
         type(node),pointer :: first => null()
     contains
-        procedure :: add => list_add
+        procedure, private :: list_add
+        procedure, private :: list_add_single
+        generic :: add => list_add, list_add_single
         procedure,private :: list_get_no_alloc
         procedure,private :: list_get_alloc
-        generic :: get => list_get_no_alloc, list_get_alloc
+        procedure,private :: list_get_no_alloc_single
+        generic :: get => list_get_no_alloc, list_get_alloc, list_get_no_alloc_single
         procedure :: getf => list_getf
         procedure, private :: list_remove_by_data
         procedure, private :: list_remove_by_num
@@ -32,6 +35,12 @@ module LinkedList
         pure module subroutine list_add(lst,dat,num)
             class(list), intent(inout) :: lst
             class(*), dimension(:), intent(in) :: dat
+            integer, intent(in), optional :: num
+        endsubroutine
+    
+        pure module subroutine list_add_single(lst,dat,num)
+            class(list), intent(inout) :: lst
+            class(*), intent(in) :: dat
             integer, intent(in), optional :: num
         endsubroutine
     
@@ -51,7 +60,14 @@ module LinkedList
             class(list),intent(in) :: lst
             integer,optional,intent(in) :: num
             class(*),dimension(:), intent(out) :: res
-            endsubroutine
+        endsubroutine
+    
+        pure module subroutine list_get_no_alloc_single(lst,res,num)
+            class(list),intent(in) :: lst
+            integer,optional,intent(in) :: num
+            class(*), intent(out) :: res
+        endsubroutine
+    
     
         pure module subroutine list_get_alloc(lst,num, resstar)
             class(list),intent(in) :: lst

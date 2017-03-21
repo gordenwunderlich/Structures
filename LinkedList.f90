@@ -35,6 +35,16 @@ contains
         lst%len=lst%len+1
     endsubroutine
     
+     pure module subroutine list_add_single(lst,dat, num)
+        class(list), intent(inout) :: lst
+        integer,intent(in), optional :: num
+        class(*), intent(in) :: dat
+        class(*), dimension(:), pointer :: datnew
+        allocate(datnew(1), source = dat)
+        call lst%add(datnew,num)
+        deallocate(datnew)
+    endsubroutine
+    
     
     pure module subroutine list_remove_by_data(lst,dat)
         class(list), intent(inout) :: lst
@@ -122,6 +132,18 @@ contains
         deallocate(tmptmp)
     endsubroutine
     
+    pure module subroutine list_get_no_alloc_single(lst,res,num)
+        class(list),intent(in) :: lst
+        integer,optional,intent(in) :: num
+        class(*), intent(out) :: res
+        class(*), dimension(:), allocatable :: tmpres
+        allocate(tmpres(1), mold=res)
+        call lst%get(tmpres, num)
+        call get_data_single(res,tmpres)
+        deallocate(tmpres)
+    endsubroutine
+    
+    
     pure module subroutine list_get_alloc(lst,num, resstar)
         class(list),intent(in) :: lst
         integer,optional,intent(in) :: num
@@ -159,7 +181,6 @@ contains
             class default
             allocate(res, source=s)
         endselect
-        !print *, transfer(res,(/"asd"/))
         deallocate(tmptmp)
     endfunction
     
@@ -195,13 +216,10 @@ contains
         class(list), intent(in) :: source
         class(list), intent(out) :: dest
         class(*), dimension(:), allocatable :: tmp
-        call list_destroy(dest)
-        select type(source)
-            class is(list)
-                allocate(dest%first)
-                dest%first=source%first
-                dest%len = source%len
-        endselect
+        !call list_destroy(dest)
+        allocate(dest%first)
+        dest%first=source%first
+        dest%len = source%len
     endsubroutine
     
     pure recursive module subroutine node_cpy(dest, source)
