@@ -24,8 +24,10 @@ module LinkedList
         generic :: get => list_get_no_alloc, list_get_alloc, list_get_no_alloc_single
         procedure :: getf => list_getf
         procedure, private :: list_remove_by_data
+        procedure, private :: list_remove_by_data_single
         procedure, private :: list_remove_by_num
-        generic :: remove => list_remove_by_data, list_remove_by_num
+        generic :: remove => list_remove_by_data, list_remove_by_data_single
+        generic :: remove_at => list_remove_by_num
         procedure :: length => list_length
         procedure, private, pass(dest) :: lst_cpy => list_cpy
         generic :: assignment(=) => lst_cpy
@@ -47,6 +49,11 @@ module LinkedList
         pure module subroutine list_remove_by_data(lst,dat)
             class(list), intent(inout) :: lst
             class(*), dimension(:), intent(in) :: dat
+        endsubroutine
+    
+        pure module subroutine list_remove_by_data_single(lst,dat)
+            class(list), intent(inout) :: lst
+            class(*), intent(in) :: dat
         endsubroutine
     
     

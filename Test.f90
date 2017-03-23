@@ -21,7 +21,7 @@ contains
         call b%add(q)
         call a%add("yxc")
         b=a
-        call a%remove((/"asd"/))
+        call a%remove("asd")
         call a%add((/b/))
         call a%get(y)
         call a%get(zz,2)
@@ -47,7 +47,7 @@ contains
         call a%remove(x)
         call a%get(zz,1)
         print *, "z=", zz
-        call a%remove(1)
+        call a%remove_at(1)
         call a%get(qq,1)
         print *,"q=", qq
         call b%add(x,3)

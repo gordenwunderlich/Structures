@@ -79,7 +79,17 @@ contains
         enddo
     endsubroutine
     
-        
+    pure module subroutine list_remove_by_data_single(lst,dat)
+        class(list), intent(inout) :: lst
+        class(*), intent(in) :: dat
+        class(*), dimension(:), allocatable :: tmpdat
+        allocate(tmpdat(1), source = dat)
+        call lst%remove(tmpdat)
+        deallocate(tmpdat)
+    endsubroutine    
+    
+    
+    
     
     elemental module subroutine list_remove_by_num(lst,num)
         class(list), intent(inout) :: lst
