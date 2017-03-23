@@ -86,7 +86,7 @@ module LinkedList
         pure module function list_getf(lst,num) result(res)
             class(list),intent(in) :: lst
             integer,optional,intent(in) :: num
-            class(*),dimension(:),pointer :: res
+            class(*),dimension(:),allocatable :: res
         endfunction
     
         elemental module subroutine node_destroy(nde)

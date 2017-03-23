@@ -178,7 +178,7 @@ contains
         class(list),intent(in) :: lst
         integer,optional,intent(in) :: num
         integer :: tnum
-        class(*),dimension(:),pointer :: res
+        class(*),dimension(:),allocatable :: res
         type(node), pointer :: tmp,tmptmp 
         tnum =1
         if(present(num)) tnum=num
