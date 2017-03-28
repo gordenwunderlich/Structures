@@ -116,7 +116,7 @@ contains
                 type is (list)
                     select type(d2 => data2)
                     type is (list)
-                        !res = all(d1 .eq. d2) 
+                        res = all(d1 .eq. d2) 
                     endselect
                 !add custom type selects here
             endselect

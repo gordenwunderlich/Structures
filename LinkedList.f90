@@ -53,7 +53,7 @@ contains
         integer(1), dimension(:),allocatable :: bytetest
         if(.not. ASSOCIATED(lst%first)) return
         tmp => lst%first
-        if(same_type_as(lst%first%data, dat) .and. all(transfer(lst%first%data,bytetest) .eq. transfer(dat,bytetest))) then 
+        if(compare_data(lst%first%data,dat)) then 
                 if(associated(lst%first%next)) then 
                     lst%first => tmp%next
                 else
@@ -66,7 +66,7 @@ contains
         do i=2,lst%len
             last => tmp
             if(associated(tmp%next))tmp => tmp%next
-            if(same_type_as(tmp%data, dat) .and. all(transfer(tmp%data,bytetest) .eq. transfer(dat,bytetest))) then 
+            if(compare_data(tmp%data, dat)) then 
                 if(associated(tmp%next)) then 
                     last%next => tmp%next
                 else
@@ -231,6 +231,21 @@ contains
         dest%first=source%first
         dest%len = source%len
     endsubroutine
+    
+    elemental module function list_compare(lst1, lst2) result(res)
+        class(list), intent(in) :: lst1, lst2
+        logical :: res
+        res = .true.
+        if(lst1%length() .eq. lst2%length()) then
+            do i = 1,lst1%length()
+                if(.not. compare_data(lst1%getf(i), lst2%getf(i))) then
+                    res = .false.
+                    exit
+                endif
+            enddo
+        endif
+    endfunction
+    
     
     pure recursive module subroutine node_cpy(dest, source)
         class(node),  intent(in) :: source

@@ -30,6 +30,8 @@ module LinkedList
         generic :: remove_at => list_remove_by_num
         procedure :: length => list_length
         procedure, private, pass(dest) :: lst_cpy => list_cpy
+        procedure, private :: list_compare
+        generic :: operator(.eq.) => list_compare
         generic :: assignment(=) => lst_cpy
         final :: list_destroy
     endtype
@@ -106,6 +108,12 @@ module LinkedList
             class(list), intent(in) :: source
             class(list), intent(out) :: dest
         endsubroutine
+    
+        elemental module function list_compare(lst1, lst2) result(res)
+            class(list), intent(in) :: lst1, lst2
+            logical :: res
+        endfunction
+    
     
         pure recursive module subroutine node_cpy(dest, source)
             class(node),  intent(in) :: source

@@ -54,5 +54,8 @@ contains
         y = 0
         call b%get(y)
         print *,"x=", y
+        print *, a%length()
+        call a%remove(b)
+        print *, a%length()
     endsubroutine
 endprogram
