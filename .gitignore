@@ -32,3 +32,13 @@ makefile
 *.optrpt
 *.pdb
 *.dyn
+
+# Visual Studio
+*.suo
+*.settings
+*.sln
+*.u2d
+*.vfproj
+/x64
+/x86
+
