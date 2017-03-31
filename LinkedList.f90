@@ -50,7 +50,6 @@ contains
         class(list), intent(inout) :: lst
         class(*), dimension(:), intent(in) :: dat
         type(node),pointer :: tmp,last
-        integer(1), dimension(:),allocatable :: bytetest
         if(.not. ASSOCIATED(lst%first)) return
         tmp => lst%first
         if(compare_data(lst%first%data,dat)) then 
@@ -95,7 +94,6 @@ contains
         class(list), intent(inout) :: lst
         integer,optional, intent(in) :: num
         type(node),pointer :: tmp,last
-        integer(1), dimension(:),allocatable :: bytetest
         if(.not. ASSOCIATED(lst%first)) return
         tmp => lst%first
         if(num .eq. 1) then 
@@ -179,17 +177,17 @@ contains
         integer,optional,intent(in) :: num
         integer :: tnum
         class(*),dimension(:),allocatable :: res
-        type(node), pointer :: tmp,tmptmp 
+        type(node), pointer :: tmp, tmptmp
         tnum =1
         if(present(num)) tnum=num
-        allocate(tmptmp ,source=lst%first)
+        allocate(tmptmp, source= lst%first)
         tmp => tmptmp
         do i=1,tnum-1
             tmp => tmp%next
         enddo
         select type(s => tmp%data)
             class default
-            allocate(res, source=s)
+                allocate(res, source=s)
         endselect
         deallocate(tmptmp)
     endfunction
@@ -225,7 +223,6 @@ contains
     elemental module subroutine list_cpy(dest, source)
         class(list), intent(in) :: source
         class(list), intent(out) :: dest
-        class(*), dimension(:), allocatable :: tmp
         !call list_destroy(dest)
         allocate(dest%first)
         dest%first=source%first
@@ -234,15 +231,20 @@ contains
     
     elemental module function list_compare(lst1, lst2) result(res)
         class(list), intent(in) :: lst1, lst2
+        class(*), dimension(:), allocatable :: element1, element2
         logical :: res
         res = .true.
         if(lst1%length() .eq. lst2%length()) then
             do i = 1,lst1%length()
-                if(.not. compare_data(lst1%getf(i), lst2%getf(i))) then
+                call lst1%get(num=i, resstar= element1)
+                call lst2%get(num=i, resstar= element2)
+                if(.not. compare_data(element1,element2)) then
                     res = .false.
                     exit
                 endif
             enddo
+        else
+            res = .false.
         endif
     endfunction
     

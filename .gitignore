@@ -39,6 +39,7 @@ makefile
 *.sln
 *.u2d
 *.vfproj
+*.db3
 /x64
 /x86
 

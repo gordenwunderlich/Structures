@@ -55,6 +55,7 @@ contains
         call b%get(y)
         print *,"x=", y
         print *, a%length()
+        call b%remove_at(3)
         call a%remove(b)
         print *, a%length()
     endsubroutine
