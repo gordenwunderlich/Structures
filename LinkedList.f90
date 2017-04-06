@@ -37,12 +37,40 @@ contains
     
      pure module subroutine list_add_single(lst,dat, num)
         class(list), intent(inout) :: lst
+        type(node),pointer :: tmp, lasttmp
+        type(node),pointer :: toadd
         integer,intent(in), optional :: num
-        class(*), intent(in) :: dat
-        class(*), dimension(:), pointer :: datnew
-        allocate(datnew(1), source = dat)
-        call lst%add(datnew,num)
-        deallocate(datnew)
+        integer :: count
+        class(*),intent(in) :: dat
+        count = 1
+		allocate(toadd)
+		allocate(toadd%data(1), source=dat)
+        if(.not.associated(lst%first)) then
+            !allocate(lst%first, source=node(data = dat))
+			lst%first => toadd
+        else
+            tmp => lst%first
+            lasttmp => null()
+            do while((.not. present(num) .or. count .lt. num) .and. associated(tmp%next)) !not standard might need change
+                lasttmp => tmp
+                tmp => tmp%next
+                count = count + 1
+            enddo
+            if(.not. present(num)) then
+                !allocate(tmp%next,source=node(data = dat))
+				tmp%next => toadd
+            else
+                if(.not. associated(lasttmp)) then
+                    toadd%next => lst%first
+                    lst%first => toadd
+                else
+                    !allocate(lasttmp%next,source=node(data = dat))
+					lasttmp%next => toadd
+                    lasttmp%next%next => tmp
+                endif
+            endif
+        endif
+        lst%len=lst%len+1
     endsubroutine
     
     

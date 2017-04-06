@@ -5,7 +5,7 @@ contains
     subroutine test()
         type(list) :: a
         type(list) :: b
-        type(list), dimension(1) :: bb
+        type(list) :: bb
         integer,dimension(3) :: y
         real,dimension(2) :: zz
         character(3):: qq
@@ -22,7 +22,7 @@ contains
         call a%add("yxc")
         b=a
         call a%remove("asd")
-        call a%add((/b/))
+        call a%add(b)
         call a%get(y)
         call a%get(zz,2)
         call a%get(qq,3)
@@ -37,10 +37,10 @@ contains
         print *,"x=", y
         print *, "z=", zz
         print *,"q=", qq
-        print *, "length:", bb(1)%length()
-        call bb(1)%get(y)
-        call bb(1)%get(zz,2)
-        call bb(1)%get(qq,3)
+        print *, "length:", bb%length()
+        call bb%get(y)
+        call bb%get(zz,2)
+        call bb%get(qq,3)
         print *,"x=", y
         print *, "z=", zz
         print *,"q=", qq
