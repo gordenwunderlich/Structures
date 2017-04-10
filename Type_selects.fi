@@ -1,0 +1,33 @@
+! __operation__ is assignment(=) for get_data and operator(.eq.) for compare_data
+! to enable custom types to be used with the list just add a select for them and put a use statement in Structures.f90
+type is (integer)
+	select type(d => dest)
+		type is (integer)
+			__operation__
+		endselect
+	type is (real)
+		select type(d => dest)
+		type is (real)
+			__operation__
+		endselect
+	type is (character(*))
+		select type(d => dest)
+		type is (character(*))
+			__operation__
+		endselect
+	type is (complex)
+		select type(d => dest)
+		type is (complex)
+			__operation__
+		endselect
+	type is (logical)
+		select type(d => dest)
+		type is (logical)
+			__logoperation__ 
+		endselect
+	type is (list)
+		select type(d => dest)
+		type is (list)
+			__operation__
+		endselect
+	!add custom type selects here

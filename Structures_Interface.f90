@@ -16,8 +16,8 @@ module struct_util
         endsubroutine
 
 		!helper function to compare to class(*) arrays
-        pure module function compare_data(data1,data2) result(res)
-            class(*), dimension(:), intent(in) :: data1, data2
+        pure module function compare_data(dest,source) result(res)
+            class(*), dimension(:), intent(in) :: dest, source
             logical :: res
         endfunction
     
