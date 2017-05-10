@@ -40,6 +40,7 @@ makefile
 *.u2d
 *.vfproj
 *.db3
+*.fdz
 /x64
 /x86
 

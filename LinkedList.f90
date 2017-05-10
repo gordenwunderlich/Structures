@@ -10,7 +10,8 @@ contains
         class(*), dimension(:),intent(in) :: dat
         count = 1
         if(.not.associated(lst%first)) then
-            allocate(lst%first, source=node(data = dat))
+            allocate(lst%first)
+            lst%first%data = dat
         else
             tmp => lst%first
             lasttmp => null()
@@ -31,11 +32,12 @@ contains
                 allocate(tmp%next,source=node(data = dat))
             else
                 if(.not. associated(lasttmp)) then
-                    allocate(toadd%data, source=dat)
+                    toadd%data =dat
                     toadd%next => lst%first
                     lst%first => toadd
                 else
-                    allocate(lasttmp%next,source=node(data = dat))
+                    allocate(lasttmp%next)
+                    lasttmp%next%data = dat
                     lasttmp%next%next => tmp
                 endif
             endif
@@ -206,10 +208,7 @@ contains
         do i=1,tnum-1
             tmp => tmp%next
         enddo
-        select type(s => tmp%data)
-            class default    
-                allocate(resstar,source=s)
-        endselect
+        resstar = tmp%data
         deallocate(tmptmp)
     endsubroutine
     
@@ -226,10 +225,7 @@ contains
         do i=1,tnum-1
             tmp => tmp%next
         enddo
-        select type(s => tmp%data)
-            class default
-                allocate(res, source=s)
-        endselect
+        res = tmp%data
         deallocate(tmptmp)
     endfunction
     
@@ -264,7 +260,7 @@ contains
     elemental module subroutine list_cpy(dest, source)
         class(list), intent(in) :: source
         class(list), intent(out) :: dest
-        !call list_destroy(dest)
+        call list_destroy(dest)
         allocate(dest%first)
         dest%first=source%first
         dest%len = source%len
@@ -272,14 +268,11 @@ contains
     
     elemental module function list_compare(lst1, lst2) result(res)
         class(list), intent(in) :: lst1, lst2
-        class(*), dimension(:), allocatable :: element1, element2
         logical :: res
         res = .true.
         if(lst1%length() .eq. lst2%length()) then
             do i = 1,lst1%length()
-                call lst1%get(num=i, resstar= element1)
-                call lst2%get(num=i, resstar= element2)
-                if(.not. compare_data(element1,element2)) then
+                if(.not. compare_data(lst1%getf(i),lst2%getf(i))) then
                     res = .false.
                     exit
                 endif
@@ -293,7 +286,7 @@ contains
     pure recursive module subroutine node_cpy(dest, source)
         class(node),  intent(in) :: source
         class(node),  intent(out) :: dest
-        allocate(dest%data, source=source%data)
+        dest%data = source%data
         if(associated(source%next)) then 
             allocate(dest%next)
             dest%next = source%next

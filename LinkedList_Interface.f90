@@ -77,7 +77,7 @@ module LinkedList
 		pure module subroutine list_get_no_alloc(lst,res,num)
 			class(list),						intent(in) :: lst		!the passed list (this is passed automatically when lst%get(res,num) is called and you can't explicitly call lst%get(lst,res,num)
 			integer,optional,				intent(in) :: num	!the number(position) of the element you want to extract
-			class(*),dimension(:),	intent(out) :: res	!data array of the same type as the data you want to extract from the list
+			class(*),dimension(:),      	intent(out) :: res	!data array of the same type as the data you want to extract from the list
 		endsubroutine
 		
 		!returns an element from the list into a non-allocatable scalar
